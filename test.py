@@ -67,7 +67,7 @@ def display_compass(qibla_angle):
     print("W ----+---- E")
     print("      |")
     print("      S")
-    print(f"\nYour Qibla direction is approximately: {qibla_angle:.2f}° from North")
+    print(f"\n Your Qibla direction is approximately: {qibla_angle:.2f}° from North")
     print(f"That is closest to: {cardinal} {arrow_symbol}\n")
 
 def main():
