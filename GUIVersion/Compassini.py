@@ -35,6 +35,21 @@ def calculate_bearing(lat, lon, dest_lat, dest_lon):
     θ = math.atan2(x, y)
     return (math.degrees(θ) + 360) % 360
 
+def haversine_distance(lat1, lon1, lat2, lon2):
+    R = 6371.0  # Earth's radius in kilometers
+
+    φ1, φ2 = math.radians(lat1), math.radians(lat2)
+    Δφ = math.radians(lat2 - lat1)
+    Δλ = math.radians(lon2 - lon1)
+
+    a = math.sin(Δφ / 2)**2 + math.cos(φ1) * math.cos(φ2) * math.sin(Δλ / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    distance = R * c
+
+    return distance  # distance in kilometers
+
+
 def plot_compass(bearing_deg):
     fig, ax = plt.subplots(figsize=(5,5), subplot_kw={'projection':'polar'})
     ax.set_theta_zero_location('N')
@@ -61,7 +76,14 @@ def plot_compass(bearing_deg):
     ax.set_title(f"Bearing: {bearing_deg:.2f}° from North", va='bottom')
     plt.show()
 
-# —————— Interactive lookup ——————
+
+def validate_coordinates(lat, lon):
+    if not (-90 <= lat <= 90):
+        raise ValueError(f"Latitude {lat} out of bounds (must be between -90 and 90)")
+    if not (-180 <= lon <= 180):
+        raise ValueError(f"Longitude {lon} out of bounds (must be between -180 and 180)")
+
+
 
 def ask_for_location(prompt):
     """
@@ -74,6 +96,7 @@ def ask_for_location(prompt):
     if key in CITY_COORDS:
         lat, lon = CITY_COORDS[key]
         print(f"→ Found {name.title()}: ({lat:.5f}, {lon:.5f})")
+        validate_coordinates(lat, lon)
         return lat, lon
 
     print(f"✗ “{name}” not found. Please enter coordinates manually.")
@@ -81,6 +104,7 @@ def ask_for_location(prompt):
         try:
             lat = float(input("  latitude  (decimal °): "))
             lon = float(input("  longitude (decimal °): "))
+            validate_coordinates(lat, lon)
             return lat, lon
         except ValueError:
             print("  Invalid numbers, try again.")
@@ -94,8 +118,14 @@ def main():
     print("\nWhere do you want to go?")
     dest_lat, dest_lon = ask_for_location("Destination city")
 
+    distance = haversine_distance(orig_lat, orig_lon, dest_lat, dest_lon)
+    print(f"Distance: {distance:.2f} km")
+
     bearing = calculate_bearing(orig_lat, orig_lon, dest_lat, dest_lon)
     plot_compass(bearing)
+
+    
+
 
 if __name__ == "__main__":
     main()
