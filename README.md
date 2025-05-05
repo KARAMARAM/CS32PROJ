@@ -2,8 +2,8 @@
 City-Based Compass Tool:
 
 This project calculates the compass bearing and distance between two locations based on coordinates or city names. 
-It includes several Python scripts with optional map plotting and Qibla direction features.
 
+It includes several Python scripts with optional map plotting and Qibla direction features.
 
 How to Run:
 

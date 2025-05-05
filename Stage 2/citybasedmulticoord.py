@@ -64,7 +64,7 @@ def ask_for_location(prompt):
         print(f"→ Found {name.title()}: ({lat:.5f}, {lon:.5f})")
         return lat, lon
     else:
-        print(f"✗ “{name}” not found in city list.")
+        print(f" “{name}” not found in city list.")
         while True:
             try:
                 lat = float(input("Enter latitude  (decimal °): "))
